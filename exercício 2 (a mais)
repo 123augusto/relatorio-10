@@ -1,0 +1,87 @@
+// --- INTERFACE (Abstração) ---
+
+// Simula um contrato. Qualquer classe que herdar daqui DEVE implementar o usar()
+class Habilidade {
+    usar() {
+        throw new Error("Erro: O método 'usar()' deve ser implementado pela classe filha!");
+    }
+}
+
+
+// --- CLASSES COMPONENTES (Herança e Sobrescrita) ---
+
+class Smoke extends Habilidade {
+    usar() {
+        return "Lançando uma cortina de fumaça para bloquear a visão dos inimigos!";
+    }
+}
+
+class Flash extends Habilidade {
+    usar() {
+        return "Disparando um clarão para cegar quem estiver olhando!";
+    }
+}
+
+class Dash extends Habilidade {
+    usar() {
+        return "Avançando rapidamente com um salto no ar para fugir ou surpreender!";
+    }
+}
+
+class Armadilha extends Habilidade {
+    usar() {
+        return "Posicionando um fio de armadilha oculto para proteger as costas!";
+    }
+}
+
+
+// --- COMPOSIÇÃO ---
+
+class Agente {
+    constructor(nome, funcao, habilidadeEquipada) {
+        this.nome = nome;
+        this.funcao = funcao;
+        
+        // COMPOSIÇÃO: O Agente "TEM UMA" Habilidade. 
+        // Ele não herda de habilidade, ele a possui como uma parte de si.
+        this.habilidade = habilidadeEquipada; 
+    }
+
+    entrarEmCombate() {
+        console.log(`🔫 [${this.funcao}] O agente ${this.nome} entrou na partida.`);
+        
+        // Polimorfismo em ação: o agente não sabe qual é a habilidade específica,
+        // ele apenas confia no contrato da interface de que o método usar() existe.
+        const acao = this.habilidade.usar();
+        console.log(`   -> Ação Tática: ${acao}`);
+    }
+}
+
+
+// --- MAIN (Testando o Cenário) ---
+
+// 1. Criando instâncias das habilidades (os componentes)
+const habilidadeSmoke = new Smoke();
+const habilidadeFlash = new Flash();
+const habilidadeDash = new Dash();
+const habilidadeArmadilha = new Armadilha();
+
+// 2. Criando os Agentes e "injetando" suas respectivas habilidades via construtor
+const omen = new Agente("Omen", "Controlador", habilidadeSmoke);
+const phoenix = new Agente("Phoenix", "Iniciador", habilidadeFlash);
+const jett = new Agente("Jett", "Duelista", habilidadeDash);
+const cypher = new Agente("Cypher", "Sentinela", habilidadeArmadilha);
+
+console.log("--- FASE DE PREPARAÇÃO ---");
+
+// 3. Acionando os agentes
+omen.entrarEmCombate();
+console.log("");
+
+phoenix.entrarEmCombate();
+console.log("");
+
+jett.entrarEmCombate();
+console.log("");
+
+cypher.entrarEmCombate();
